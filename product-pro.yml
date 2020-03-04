@@ -1,7 +1,7 @@
 server:
   port: 9010
 
-name: product-pro-test-33333
+name: product-pro-test-444444
 
 spring:
   application:
