@@ -1,0 +1,42 @@
+server:
+  port: 9010
+
+spring:
+  application:
+    name: product-service
+  #修改zipkin使用rabbitmq采集数据
+  zipkin:
+    #base-url: http://127.0.0.1:9411/    # server 地址
+    sender:
+      type: rabbit  # 向rabbitmq中发送消息
+      #type: web  #请求方式,默认以http的方式向zipkin server发送追踪数据
+  sleuth:
+    sampler:
+      probability: 1.0  #采样的百分比，默认0.1
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener: # 这里配置了重试策略
+      direct:
+        retry:
+          enabled: true
+      simple:
+        retry:
+          enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8800/eureka/
+  instance:
+    prefer-ip-address: true   # ʹ��IP��ַע��
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}   # ��ע������ע�����Id
+    lease-renewal-interval-in-seconds: 30   # ��������
+    lease-expiration-duration-in-seconds: 90  # ��Լ����
+logging:
+  level:
+    root: INFO
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
